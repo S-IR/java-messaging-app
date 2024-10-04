@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Home</title>
+</head>
+<body>
+<h1>Messages:</h1>
+<ul>
+    <li th:each="message : ${messages}">
+        <strong th:text="'NAME : ' + ${message.personName}">Name :</strong>:
+        <br>
+        <span th:text="'MESSAGE : ' + ${message.message}">Message :</span>
+        <em>(<span th:text="'DATE : ' + ${message.date}">Date :</span>)</em>
+    </li>
+</ul>
+
+
+<h2>Add a New Message</h2>
+<form id="messageForm">
+    <label for="message">Message:</label>
+    <textarea id="message" name="message" required></textarea>
+    <br>
+    <button type="button" onclick="submitForm()">Post  
+        Message
+    </button>
+</form>
+
+
+<script>
+    function submitForm() {
+       const formData = new FormData(document.getElementById('messageForm'));
+        const formDataStr= new URLSearchParams(formData).toString();
+                console.log("formDataStr", formDataStr);
+        const url = '/chat?name=Jim';
+
+        fetch(url, {
+            method: 'POST',
+            body: formDataStr
+        })
+        .then(response => {
+            if (response.ok) {
+                console.log('Message sent successfully!');
+                location.reload();
+            } else {
+                console.error('Error sending message');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+</script>
+</body>
+</html>
